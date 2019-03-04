@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import sparse
+import sys
 
 from utils import get_data_file_location, \
                   get_flavors_list, \
@@ -64,7 +65,10 @@ class Model(object):
         return self
 
     def _stack_flavors(self, flavors):
-        return sparse.hstack([d for f,d in self._data.iteritems() if f in flavors])
+        if sys.version_info[0] != 3:
+            return sparse.hstack([d for f,d in self._data.iteritems() if f in flavors])
+        else:
+            return sparse.hstack([d for f,d in self._data.items() if f in flavors])
 
     def _load_flavors(self, flavors=None, force=False):
         if flavors is None:
